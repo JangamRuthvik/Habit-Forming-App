@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+//2nd pull
 
 void main() {
   runApp(const MyApp());
@@ -30,7 +30,6 @@ class NavigationScreen extends StatefulWidget {
   State<NavigationScreen> createState() => _NavigationScreenState();
 }
 
-
 class _NavigationScreenState extends State<NavigationScreen> {
   @override
   Widget build(BuildContext context) {
@@ -56,9 +55,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.timeline), label: "Habits"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile")
         ],
-        ),
-        );
-        }
+      ),
+    );
+  }
 }
-
-
