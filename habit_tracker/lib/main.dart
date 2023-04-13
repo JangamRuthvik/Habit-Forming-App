@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -30,7 +29,6 @@ class NavigationScreen extends StatefulWidget {
   State<NavigationScreen> createState() => _NavigationScreenState();
 }
 
-
 class _NavigationScreenState extends State<NavigationScreen> {
   @override
   Widget build(BuildContext context) {
@@ -53,12 +51,11 @@ class _NavigationScreenState extends State<NavigationScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today), label: "Progress"),
-          BottomNavigationBarItem(icon: Icon(Icons.timeline), label: "Habits"),
+          // BottomNavigationBarItem(icon: Icon(Icons.timeline), label: "Habits"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
           // BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile")
         ],
-        ),
-        );
-        }
+      ),
+    );
+  }
 }
-
-
