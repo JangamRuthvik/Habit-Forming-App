@@ -52,7 +52,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
           BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today), label: "Progress"),
           BottomNavigationBarItem(icon: Icon(Icons.timeline), label: "Habits"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile")
+          // BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile")
         ],
       ),
     );
