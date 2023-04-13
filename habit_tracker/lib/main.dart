@@ -58,6 +58,3 @@ class _NavigationScreenState extends State<NavigationScreen> {
     );
   }
 }
-
-//nikhil
-//aravind
