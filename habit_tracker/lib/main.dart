@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 //import 'package:habit_speed_code/pages/profilePage.dart';
 import 'package:habit_tracker/pages/profilePage.dart';
 import './pages/homePage.dart';
+import './pages/progresspage.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -32,7 +34,7 @@ class NavigationScreen extends StatefulWidget {
   State<NavigationScreen> createState() => _NavigationScreenState();
 }
 
-const List<Widget> screens = [HomePage(), ProfilePage()];
+const List<Widget> screens = [HomePage(),ProgressPage(), ProfilePage()];
 
 class _NavigationScreenState extends State<NavigationScreen> {
   @override
@@ -56,6 +58,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today), label: "Progress"),
+          BottomNavigationBarItem(icon: Icon(Icons.timeline), label: "Habits"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile")
         ],
       ),
