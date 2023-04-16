@@ -20,19 +20,21 @@ class _HomePageState extends State<HomePage> {
       showDialog(
           context: context,
           builder: (BuildContext context) {
-            TextEditingController habitNameController =
-                TextEditingController(text: "Habit Name");
+            TextEditingController habitNameController = TextEditingController();
             TextEditingController habitDescriptionController =
-                TextEditingController(text: "Habit Description");
+                TextEditingController();
             return AlertDialog(
               title: Text("Add a Habit"),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextFormField(
+                    decoration: InputDecoration(labelText: 'Habit Name'),
                     controller: habitNameController,
                   ),
                   TextFormField(
+                    decoration:
+                        InputDecoration(labelText: 'Habit Descriiption'),
                     controller: habitDescriptionController,
                   ),
                 ],
