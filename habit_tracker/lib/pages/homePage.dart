@@ -155,6 +155,7 @@ class _HomePageState extends State<HomePage> {
                   child: Divider(),
                 ),
                 SizedBox(
+                  height: 500,
                   child: ListView.builder(
                     padding: EdgeInsets.zero,
                     shrinkWrap: true,
