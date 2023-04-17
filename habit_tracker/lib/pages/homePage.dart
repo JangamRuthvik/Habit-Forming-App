@@ -68,7 +68,20 @@ class _HomePageState extends State<HomePage> {
             );
           });
     }
-
+    Color getColor(double value) {
+          if (value < 0.3)
+          {
+              return Colors.red;
+          } 
+          else if (value > 0.3 && value <0.6)
+          {
+              return Colors.yellow;
+          }
+          else
+          {
+              return Colors.green;
+          }
+    }
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         mini: true,
@@ -92,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                   alignment: Alignment.centerLeft,
                   child: Column(children: [
                     Text(
-                      "Hey Hermano!",
+                      "HELLO FOLKS!",
                       style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -130,12 +143,15 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Keep Going!",
+                        "Let's go ",
                         style: TextStyle(color: Colors.grey[600], fontSize: 16),
                       ),
-                      Text("${((counter / habitList.length) * 100).round()}%",
+                      Row(children: [
+                        Icon(Icons.battery_charging_full_outlined),
+                        Text("${((counter / habitList.length) * 100).round()}%",
                           style:
-                              TextStyle(color: Colors.grey[600], fontSize: 16))
+                              TextStyle(color: Colors.grey[600], fontSize: 16,),),
+                      ],),
                     ],
                   ),
                 ),
@@ -144,10 +160,13 @@ class _HomePageState extends State<HomePage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     child: LinearProgressIndicator(
-                        minHeight: 12,
-                        color: Colors.deepPurpleAccent,
-                        backgroundColor: Color.fromARGB(255, 192, 170, 250),
-                        value: (counter / habitList.length)),
+                        minHeight: 25,
+                        color: Colors.black,
+                        backgroundColor: Colors.black12,
+                        value: (counter / habitList.length),
+                        valueColor: AlwaysStoppedAnimation<Color>(getColor(counter/habitList.length)),
+                        ),
+                       
                   ),
                 ),
                 Padding(
@@ -155,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                   child: Divider(),
                 ),
                 SizedBox(
-                  height: 500,
+                  height: 400,
                   child: ListView.builder(
                     padding: EdgeInsets.zero,
                     shrinkWrap: true,
