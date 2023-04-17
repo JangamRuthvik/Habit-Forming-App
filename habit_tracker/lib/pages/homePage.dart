@@ -83,24 +83,35 @@ class _HomePageState extends State<HomePage> {
           }
     }
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        mini: true,
-        backgroundColor: Colors.purple,
-        child: Icon(Icons.add),
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: (() {
           addHabit(context);
         }),
+        tooltip: 'Add a Habit',
+        label: Text('Add Habit'),
+        icon: Icon(Icons.add),
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: BorderSide(color: Colors.deepPurple)),
+        elevation: 5,
+        highlightElevation: 10,
+        
+        isExtended: true,
+        heroTag: 'addHabitButton',
       ),
-      backgroundColor: Colors.grey[100],
+
+      backgroundColor: Colors.black,
       body: ListView(padding: EdgeInsets.zero, children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(25),
             child: Stack(children: [
               Image.asset('assets/tokyo.png'),
               Padding(
-                padding: EdgeInsets.fromLTRB(20, 140, 0, 20),
+                padding: EdgeInsets.fromLTRB(20, 220, 0, 20),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Column(children: [
@@ -143,14 +154,14 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Let's go ",
+                        "Keep Going!",
                         style: TextStyle(color: Colors.grey[600], fontSize: 16),
                       ),
                       Row(children: [
                         Icon(Icons.battery_charging_full_outlined),
-                        Text("${((counter / habitList.length) * 100).round()}%",
+                        Text("${((counter / habitList.length) * 100).clamp(0, 100).toInt()}%",
                           style:
-                              TextStyle(color: Colors.grey[600], fontSize: 16,),),
+                              TextStyle(color: Colors.grey[600], fontSize: 16))
                       ],),
                     ],
                   ),
@@ -173,31 +184,59 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.only(top: 10),
                   child: Divider(),
                 ),
-                SizedBox(
+                habitList.isEmpty
+            ? Expanded(
+                child: Center(
+                  child: Text(
+                    'You have no habits yet!',
+                    style: TextStyle(color: Colors.grey[600], fontSize: 16),
+                  ),
+                ),
+              )
+              :  SizedBox(
                   height: 400,
                   child: ListView.builder(
                     padding: EdgeInsets.zero,
                     shrinkWrap: true,
                     itemCount: habitList.length,
                     itemBuilder: (context, int index) {
-                      return ListTile(
-                          title: Text(habitList[index][1]),
-                          subtitle: Text(habitList[index][2]),
-                          trailing: habitList[index][3],
-                          leading: Checkbox(
-                            value: habitList[index][0],
-                            onChanged: ((value) {
-                              setState(() {
-                                if (value == false) {
-                                  counter -= 1;
+                      return Dismissible(
+                          key: Key(habitList[index].toString()),
+                          direction: DismissDirection.endToStart,
+                          background: Container(
+                            alignment: Alignment.centerRight,
+                            color: Colors.red,
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                          ),
+                          onDismissed: (direction) {
+                            setState(() {
+                              habitList.removeAt(index);
+                              counter = habitList.where((item) => item[0]).length;
+                            });
+                          },
+                          child: ListTile(
+                            title: Text(habitList[index][1]),
+                            subtitle: Text(habitList[index][2]),
+                            trailing: habitList[index][3],
+                            leading: Checkbox(
+                              value: habitList[index][0],
+                              onChanged: ((value) {
+                                setState(() {
+                                  if (value == false) {
+                                    counter -= 1;
+                                    print(counter.toString());
+                                    habitList[index][0] = value;
+                                  } else
+                                    counter += 1;
                                   print(counter.toString());
                                   habitList[index][0] = value;
-                                } else
-                                  counter += 1;
-                                print(counter.toString());
-                                habitList[index][0] = value;
-                              });
-                            }),
+                                });
+                              }),
+                            ),
                           ));
                     },
                   ),
