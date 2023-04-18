@@ -96,19 +96,22 @@ class _HomePageState extends State<HomePage> {
           });
     }
     Color getColor(double value) {
-          if (value < 0.3)
+          if (value < 0.4)
           {
               return Colors.red;
           } 
-          else if (value > 0.3 && value <0.6)
+          else if (value > 0.4 && value <0.9)
           {
-              return Colors.yellow;
+              return Color.fromARGB(218, 255, 235, 59);
           }
           else
           {
-              return Colors.green;
+              return Color.fromARGB(255, 119, 175, 76);
           }
     }
+
+    int percentage = ((counter / habitList.length) * 100).clamp(0, 100).toInt();
+
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: (() {
@@ -172,105 +175,142 @@ class _HomePageState extends State<HomePage> {
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30), topRight: Radius.circular(30))),
           child: Padding(
-            padding: EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Keep Going!",
-                        style: TextStyle(color: Colors.grey[600], fontSize: 16),
+    padding: EdgeInsets.all(16),
+    child: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                percentage == 100 ? "Congrats!" : "Keep Going!!",
+                style: TextStyle(color: Colors.grey[600], fontSize: 16),
+              ),
+              Row(
+                children: [
+                  Icon(Icons.battery_charging_full_outlined),
+                  Text(
+                    "$percentage%",
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+  width: MediaQuery.of(context).size.width * 0.85,
+  child: Stack(
+    children:[
+    AnimatedContainer(
+    duration: Duration(seconds: 99999999999999),
+    child: ClipRRect(
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+      child: LinearProgressIndicator(
+        minHeight: 25,
+        color: Colors.black,
+        backgroundColor: Colors.black12,
+        value: (counter / habitList.length),
+        valueColor: AlwaysStoppedAnimation<Color>(
+          getColor(counter / habitList.length),
+        ),
+      ),
+    ),
+  ),
+  percentage == 100
+                  ? Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Icon(
+                        Icons.celebration,
+                        color: Color(0xFF5940FF),
                       ),
-                      Row(children: [
-                        Icon(Icons.battery_charging_full_outlined),
-                        Text("${((counter / habitList.length) * 100).clamp(0, 100).toInt()}%",
-                          style:
-                              TextStyle(color: Colors.grey[600], fontSize: 16))
-                      ],),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.85,
-                  child: ClipRRect(
+                    )
+                  : SizedBox.shrink(),
+                Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
-                    child: LinearProgressIndicator(
-                        minHeight: 25,
-                        color: Colors.black,
-                        backgroundColor: Colors.black12,
-                        value: (counter / habitList.length),
-                        valueColor: AlwaysStoppedAnimation<Color>(getColor(counter/habitList.length)),
-                        ),
-                       
+                    border: Border.all(
+                      color: percentage == 100 ? Color.fromARGB(214, 3, 215, 10) : Colors.grey[300]!,
+                      width: 2,
+                    ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Divider(),
-                ),
-                habitList.isEmpty
+              ),
+            ],
+          ),
+        ),
+        
+        Padding(
+          padding: EdgeInsets.only(top: 10),
+          child: Divider(),
+        ),
+        habitList.isEmpty
             ? Expanded(
                 child: Center(
                   child: Text(
-                    'You have no habits yet!',
-                    style: TextStyle(color: Colors.grey[600], fontSize: 16),
+                    'No habits found',
+                    style: TextStyle(fontSize: 18),
                   ),
                 ),
               )
-              :  SizedBox(
-                  height: 400,
-                  child: ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemCount: habitList.length,
-                    itemBuilder: (context, int index) {
-                      return Dismissible(
-                          key: Key(habitList[index].toString()),
-                          direction: DismissDirection.endToStart,
-                          background: Container(
-                            alignment: Alignment.centerRight,
-                            color: Colors.red,
-                            child: Icon(
-                              Icons.delete,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                          ),
-                          onDismissed: (direction) {
+            : SizedBox(
+                height: 400,
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  itemCount: habitList.length,
+                  itemBuilder: (context, int index) {
+                    return Dismissible(
+                      key: Key(habitList[index].toString()),
+                      direction: DismissDirection.endToStart,
+                      background: Container(
+                        alignment: Alignment.centerRight,
+                        color: Colors.red,
+                        child: Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                      ),
+                      onDismissed: (direction) {
+                        setState(() {
+                          habitList.removeAt(index);
+                          counter -= 1;
+                        });
+                      },
+                      child: ListTile(
+                        title: Text(habitList[index][1]),
+                        subtitle: Text(habitList[index][2]),
+                        trailing: habitList[index][3],
+                        leading: Checkbox(
+                          value: habitList[index][0],
+                          onChanged: ((value) {
                             setState(() {
-                              habitList.removeAt(index);
-                              counter = habitList.where((item) => item[0]).length;
+                              if (value == false) {
+                                counter -= 1;
+                                print(counter.toString());
+                                habitList[index][0] = value;
+                              } else
+                                counter += 1;
+                              print(counter.toString());
+                              habitList[index][0] = value;
                             });
-                          },
-                          child: ListTile(
-                            title: Text(habitList[index][1]),
-                            subtitle: Text(habitList[index][2]),
-                            trailing: habitList[index][3],
-                            leading: Checkbox(
-                              value: habitList[index][0],
-                              onChanged: ((value) {
-                                setState(() {
-                                  if (value == false) {
-                                    counter -= 1;
-                                    print(counter.toString());
-                                    habitList[index][0] = value;
-                                  } else
-                                    counter += 1;
-                                  print(counter.toString());
-                                  habitList[index][0] = value;
-                                });
-                              }),
-                            ),
-                          ));
-                    },
-                  ),
-                )
-              ],
-            ),
-          ),
+                          }),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+      ],
+    ),
+  ),
         )
       ]),
     );
