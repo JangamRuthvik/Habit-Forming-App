@@ -27,7 +27,9 @@ class _ProgressPageState extends State<ProgressPage> {
                 padding: EdgeInsets.fromLTRB(20, 140, 0, 20),
                 child: Align(
                   alignment: Alignment.centerLeft,
-                  child: Column(children: const [
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
                     Text(
                       "Hey Buddy!",
                       style: TextStyle(
@@ -56,7 +58,22 @@ class _ProgressPageState extends State<ProgressPage> {
           child: Container(
             width: MediaQuery.of(context).size.width * 0.8,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30), color: Colors.white),
+                borderRadius: BorderRadius.circular(30), 
+                color: Colors.white,
+            ),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text(
+                      "Your Habits This Week",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[900],
+                      ),
+
             // ignore: prefer_const_literals_to_create_immutables
           ),
         ),
@@ -97,6 +114,7 @@ class _ProgressPageState extends State<ProgressPage> {
                     style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
                   ),
                   trailing: Icon(Icons.local_drink)),
+                  
               Divider(),
               ListTile(
                   leading: CircularProgressIndicator(
@@ -243,6 +261,6 @@ class _ProgressPageState extends State<ProgressPage> {
           ),
         )
       ]),
-    );
+    ))]));
   }
 }
