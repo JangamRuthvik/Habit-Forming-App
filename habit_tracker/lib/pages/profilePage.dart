@@ -10,6 +10,18 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.text = "Aravind";
+    _emailController.text = "aravind@example.com";
+    _addressController.text = "123 Main Street, Anytown USA";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,6 +81,41 @@ class _ProfilePageState extends State<ProfilePage> {
             trailing: Icon(Icons.arrow_forward_ios),
           ),
           Divider(),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: "Name",
+                  ),
+                ),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: "Email",
+                  ),
+                ),
+                TextFormField(
+                  controller: _addressController,
+                  decoration: InputDecoration(
+                    labelText: "Address",
+                  ),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      // Save changes to profile here
+                    });
+                  },
+                  child: Text("Save Changes"),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 20),
           Center(
             child: TextButton(
               onPressed: (() {
