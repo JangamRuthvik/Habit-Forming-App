@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services.dart/lists.dart';
+import './timer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -95,20 +96,17 @@ class _HomePageState extends State<HomePage> {
             );
           });
     }
+
     Color getColor(double value) {
-          if (value < 0.3)
-          {
-              return Colors.red;
-          } 
-          else if (value > 0.3 && value <0.6)
-          {
-              return Colors.yellow;
-          }
-          else
-          {
-              return Colors.green;
-          }
+      if (value < 0.3) {
+        return Colors.red;
+      } else if (value > 0.3 && value < 0.6) {
+        return Colors.yellow;
+      } else {
+        return Colors.green;
+      }
     }
+
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: (() {
@@ -124,11 +122,9 @@ class _HomePageState extends State<HomePage> {
             side: BorderSide(color: Colors.deepPurple)),
         elevation: 5,
         highlightElevation: 10,
-        
         isExtended: true,
         heroTag: 'addHabitButton',
       ),
-
       backgroundColor: Colors.black,
       body: ListView(padding: EdgeInsets.zero, children: [
         Padding(
@@ -184,12 +180,15 @@ class _HomePageState extends State<HomePage> {
                         "Keep Going!",
                         style: TextStyle(color: Colors.grey[600], fontSize: 16),
                       ),
-                      Row(children: [
-                        Icon(Icons.battery_charging_full_outlined),
-                        Text("${((counter / habitList.length) * 100).clamp(0, 100).toInt()}%",
-                          style:
-                              TextStyle(color: Colors.grey[600], fontSize: 16))
-                      ],),
+                      Row(
+                        children: [
+                          Icon(Icons.battery_charging_full_outlined),
+                          Text(
+                              "${((counter / habitList.length) * 100).clamp(0, 100).toInt()}%",
+                              style: TextStyle(
+                                  color: Colors.grey[600], fontSize: 16))
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -198,13 +197,13 @@ class _HomePageState extends State<HomePage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     child: LinearProgressIndicator(
-                        minHeight: 25,
-                        color: Colors.black,
-                        backgroundColor: Colors.black12,
-                        value: (counter / habitList.length),
-                        valueColor: AlwaysStoppedAnimation<Color>(getColor(counter/habitList.length)),
-                        ),
-                       
+                      minHeight: 25,
+                      color: Colors.black,
+                      backgroundColor: Colors.black12,
+                      value: (counter / habitList.length),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          getColor(counter / habitList.length)),
+                    ),
                   ),
                 ),
                 Padding(
@@ -212,62 +211,76 @@ class _HomePageState extends State<HomePage> {
                   child: Divider(),
                 ),
                 habitList.isEmpty
-            ? Expanded(
-                child: Center(
-                  child: Text(
-                    'You have no habits yet!',
-                    style: TextStyle(color: Colors.grey[600], fontSize: 16),
-                  ),
-                ),
-              )
-              :  SizedBox(
-                  height: 400,
-                  child: ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemCount: habitList.length,
-                    itemBuilder: (context, int index) {
-                      return Dismissible(
-                          key: Key(habitList[index].toString()),
-                          direction: DismissDirection.endToStart,
-                          background: Container(
-                            alignment: Alignment.centerRight,
-                            color: Colors.red,
-                            child: Icon(
-                              Icons.delete,
-                              color: Colors.white,
-                              size: 30,
-                            ),
+                    ? Expanded(
+                        child: Center(
+                          child: Text(
+                            'You have no habits yet!',
+                            style: TextStyle(
+                                color: Colors.grey[600], fontSize: 16),
                           ),
-                          onDismissed: (direction) {
-                            setState(() {
-                              habitList.removeAt(index);
-                              counter = habitList.where((item) => item[0]).length;
-                            });
+                        ),
+                      )
+                    : SizedBox(
+                        height: 400,
+                        child: ListView.builder(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          itemCount: habitList.length,
+                          itemBuilder: (context, int index) {
+                            return Dismissible(
+                                key: Key(habitList[index].toString()),
+                                direction: DismissDirection.endToStart,
+                                background: Container(
+                                  alignment: Alignment.centerRight,
+                                  color: Colors.red,
+                                  child: Icon(
+                                    Icons.delete,
+                                    color: Colors.white,
+                                    size: 30,
+                                  ),
+                                ),
+                                onDismissed: (direction) {
+                                  setState(() {
+                                    habitList.removeAt(index);
+                                    counter = habitList
+                                        .where((item) => item[0])
+                                        .length;
+                                  });
+                                },
+                                child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => MyApp()),
+                                      );
+                                      // Update the state to show a new timer
+                                      // setState(() {
+                                      //   // Your code to show a new timer here
+                                      // });
+                                    },
+                                    child: ListTile(
+                                      title: Text(habitList[index][1]),
+                                      subtitle: Text(habitList[index][2]),
+                                      trailing: habitList[index][3],
+                                      leading: Checkbox(
+                                        value: habitList[index][0],
+                                        onChanged: ((value) {
+                                          setState(() {
+                                            if (value == false) {
+                                              counter -= 1;
+                                              print(counter.toString());
+                                              habitList[index][0] = value;
+                                            } else
+                                              counter += 1;
+                                            print(counter.toString());
+                                            habitList[index][0] = value;
+                                          });
+                                        }),
+                                      ),
+                                    )));
                           },
-                          child: ListTile(
-                            title: Text(habitList[index][1]),
-                            subtitle: Text(habitList[index][2]),
-                            trailing: habitList[index][3],
-                            leading: Checkbox(
-                              value: habitList[index][0],
-                              onChanged: ((value) {
-                                setState(() {
-                                  if (value == false) {
-                                    counter -= 1;
-                                    print(counter.toString());
-                                    habitList[index][0] = value;
-                                  } else
-                                    counter += 1;
-                                  print(counter.toString());
-                                  habitList[index][0] = value;
-                                });
-                              }),
-                            ),
-                          ));
-                    },
-                  ),
-                )
+                        ),
+                      )
               ],
             ),
           ),
