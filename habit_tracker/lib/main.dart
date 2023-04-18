@@ -5,7 +5,6 @@ import 'package:habit_tracker/pages/profilePage.dart';
 import './pages/homePage.dart';
 import './pages/progresspage.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -34,7 +33,7 @@ class NavigationScreen extends StatefulWidget {
   State<NavigationScreen> createState() => _NavigationScreenState();
 }
 
-const List<Widget> screens = [HomePage(),ProgressPage(), ProfilePage()];
+const List<Widget> screens = [HomePage(), ProgressPage(), ProfilePage()];
 
 class _NavigationScreenState extends State<NavigationScreen> {
   @override

@@ -13,6 +13,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: ListView(
         padding: EdgeInsets.fromLTRB(15, 50, 15, 20),
         children: [
@@ -20,7 +21,7 @@ class _ProfilePageState extends State<ProfilePage> {
             radius: 150,
             backgroundColor: Colors.purpleAccent,
             backgroundImage: NetworkImage(
-                'https://cdn2.iconfinder.com/data/icons/avatars-60/5985/12-Delivery_Man-512.png'),
+                'https://t4.ftcdn.net/jpg/04/83/90/95/360_F_483909569_OI4LKNeFgHwvvVju60fejLd9gj43dIcd.jpg'),
           ),
           // ignore: prefer_const_constructors
           Padding(
