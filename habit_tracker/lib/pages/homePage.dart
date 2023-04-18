@@ -16,6 +16,10 @@ class _HomePageState extends State<HomePage> {
       habitList.add([false, habitName, habitDescription, Icon(Icons.abc)]);
     }
 
+    void _showTimepicker() {
+      showTimePicker(context: context, initialTime: TimeOfDay.now());
+    }
+
     void addHabit(BuildContext context) {
       showDialog(
           context: context,
@@ -23,6 +27,7 @@ class _HomePageState extends State<HomePage> {
             TextEditingController habitNameController = TextEditingController();
             TextEditingController habitDescriptionController =
                 TextEditingController();
+            TextEditingController remainderController = TextEditingController();
             return AlertDialog(
               title: Text("Add a Habit"),
               content: Column(
@@ -37,6 +42,28 @@ class _HomePageState extends State<HomePage> {
                         InputDecoration(labelText: 'Habit Descriiption'),
                     controller: habitDescriptionController,
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          decoration:
+                              InputDecoration(labelText: 'Add a remainder'),
+                          controller: remainderController,
+                        ),
+                      ),
+                      Transform.translate(
+                        offset: Offset(0, 18), // move down by 8 pixels
+                        child: FloatingActionButton(
+                          onPressed: () {
+                            _showTimepicker();
+                          },
+                          child: Icon(Icons.add),
+                          mini: true,
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
               actions: [
