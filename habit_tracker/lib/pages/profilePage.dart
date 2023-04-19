@@ -10,9 +10,22 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.text = "Aravind";
+    _emailController.text = "aravind@example.com";
+    _addressController.text = "123 Main Street, Anytown USA";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: ListView(
         padding: EdgeInsets.fromLTRB(15, 50, 15, 20),
         children: [
@@ -20,7 +33,7 @@ class _ProfilePageState extends State<ProfilePage> {
             radius: 150,
             backgroundColor: Colors.purpleAccent,
             backgroundImage: NetworkImage(
-                'https://cdn2.iconfinder.com/data/icons/avatars-60/5985/12-Delivery_Man-512.png'),
+                'https://t4.ftcdn.net/jpg/04/83/90/95/360_F_483909569_OI4LKNeFgHwvvVju60fejLd9gj43dIcd.jpg'),
           ),
           // ignore: prefer_const_constructors
           Padding(
@@ -68,6 +81,41 @@ class _ProfilePageState extends State<ProfilePage> {
             trailing: Icon(Icons.arrow_forward_ios),
           ),
           Divider(),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: "Name",
+                  ),
+                ),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: "Email",
+                  ),
+                ),
+                TextFormField(
+                  controller: _addressController,
+                  decoration: InputDecoration(
+                    labelText: "Address",
+                  ),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      // Save changes to profile here
+                    });
+                  },
+                  child: Text("Save Changes"),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 20),
           Center(
             child: TextButton(
               onPressed: (() {
