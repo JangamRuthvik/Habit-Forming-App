@@ -9,6 +9,114 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
+class AccountDetailsPage extends StatefulWidget {
+  final String name;
+  final String email;
+  final String address;
+
+  const AccountDetailsPage({
+    Key? key,
+    required this.name,
+    required this.email,
+    required this.address,
+  }) : super(key: key);
+
+  @override
+  _AccountDetailsPageState createState() => _AccountDetailsPageState();
+}
+
+class _AccountDetailsPageState extends State<AccountDetailsPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.purpleAccent,
+        title: Text('Account Details'),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.purple[200]!,
+              Colors.purple[50]!,
+              Colors.white,
+            ],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Name',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  '${widget.name}',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Email',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  '${widget.email}',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Address',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 10),
+              Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  '${widget.address}',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -61,6 +169,18 @@ class _ProfilePageState extends State<ProfilePage> {
             leading: Icon(Icons.person),
             title: Text("My Account Info"),
             trailing: Icon(Icons.arrow_forward_ios),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AccountDetailsPage(
+                    name: _nameController.text,
+                    email: _emailController.text,
+                    address: _addressController.text,
+                  ),
+                ),
+              );
+            },
           ),
           Divider(),
           ListTile(
