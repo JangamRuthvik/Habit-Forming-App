@@ -37,16 +37,17 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           // ignore: prefer_const_constructors
           Padding(
-            padding: EdgeInsets.only(top: 25, bottom: 10),
-            child: const Center(
+              padding: EdgeInsets.only(top: 25, bottom: 10),
+              child: Center(
                 child: Text(
-              "Hey Aravind !",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold),
-            )),
-          ),
+                  "Hey ${_nameController.text} !",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )),
           Center(
               child: Text(
             "What a wonderful day!!",
