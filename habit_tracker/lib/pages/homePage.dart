@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.black,
       body: ListView(padding: EdgeInsets.zero, children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 2),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(25),
             child: Stack(children: [
@@ -220,7 +220,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       )
                     : SizedBox(
-                        height: 400,
+                        height: 415,
                         child: ListView.builder(
                           padding: EdgeInsets.zero,
                           shrinkWrap: true,
