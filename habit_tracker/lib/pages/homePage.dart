@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services.dart/lists.dart';
 import 'package:flutter_alarm_clock/flutter_alarm_clock.dart';
 import './timer.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -12,20 +13,21 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int counter = 0;
   TimeOfDay _timeOfDay = TimeOfDay(hour: 11, minute: 27);
-  
+
   @override
   Widget build(BuildContext context) {
     void addToHabitList(String habitName, String habitDescription) {
       habitList.add([false, habitName, habitDescription, Icon(Icons.abc)]);
     }
-  //   void _showTimepicker() {
-  //   showTimePicker(context: context, initialTime: TimeOfDay.now())
-  //       .then((value) {
-  //     setState(() {
-  //       _timeOfDay = value!;
-  //     });
-  //   });
-  // }
+
+    //   void _showTimepicker() {
+    //   showTimePicker(context: context, initialTime: TimeOfDay.now())
+    //       .then((value) {
+    //     setState(() {
+    //       _timeOfDay = value!;
+    //     });
+    //   });
+    // }
     void addHabit(BuildContext context) {
       showDialog(
           context: context,
@@ -111,14 +113,26 @@ class _HomePageState extends State<HomePage> {
         return Colors.green;
       }
     }
+    bool check = false;
+    void createalarm() {
+      if (check == true) {
+        int hour = 0;
+        int minutes = 0;
+        hour = _timeOfDay.hour;
+        minutes = _timeOfDay.minute;
+        FlutterAlarmClock.createAlarm(hour, minutes);
+      }
+    }
     void _showTimepicker() {
-  showTimePicker(context: context, initialTime: TimeOfDay.now())
-      .then((value) {
-    setState(() {
-      _timeOfDay = value!;
-    });
-  });
-}
+      showTimePicker(context: context, initialTime: TimeOfDay.now())
+          .then((value) {
+        setState(() {
+          _timeOfDay = value!;
+          check = true;
+          createalarm();
+        });
+      });
+    }
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: (() {
@@ -258,110 +272,111 @@ class _HomePageState extends State<HomePage> {
                                       habitList.where((item) => item[0]).length;
                                 });
                               },
-                            child: ListTile(
-                              title: Text(habitList[index][1]),
-                              subtitle: Text(habitList[index][2]),
-                              leading: Checkbox(
-                                value: habitList[index][0],
-                                onChanged: ((value) {
-                                  setState(() {
-                                    if (value == false) {
-                                      counter -= 1;
+                              child: ListTile(
+                                title: Text(habitList[index][1]),
+                                subtitle: Text(habitList[index][2]),
+                                leading: Checkbox(
+                                  value: habitList[index][0],
+                                  onChanged: ((value) {
+                                    setState(() {
+                                      if (value == false) {
+                                        counter -= 1;
+                                        print(counter.toString());
+                                        habitList[index][0] = value;
+                                      } else
+                                        counter += 1;
                                       print(counter.toString());
                                       habitList[index][0] = value;
-                                    } else
-                                      counter += 1;
-                                    print(counter.toString());
-                                    habitList[index][0] = value;
-                                  });
-                                }),
-                              ),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      _showTimepicker();
-                                      int hour;
-                                      int minutes;
-                                      hour = _timeOfDay.hour;
-                                      minutes = _timeOfDay.minute;
-                                    },
-                                    child: Icon(
-                                      Icons.alarm,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8.0),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => MyApp()),
-                                    );
-                                  },
-                                  child: Icon(
-                                    Icons.hourglass_empty,
-                                  ),
+                                    });
+                                  }),
                                 ),
-                                  PopupMenuButton(
-                                    itemBuilder: (BuildContext context) => [
-                                      PopupMenuItem(
-                                        child: Text('Rename'),
-                                        value: 'rename',
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        _showTimepicker();
+                                      },
+                                      child: Icon(
+                                        Icons.alarm,
                                       ),
-                                      PopupMenuItem(
-                                        child: Text('Delete'),
-                                        value: 'delete',
-                                      ),
-                                    ],
-                                    onSelected: (value) {
-                                      if (value == 'rename') {
-                                        // Show dialog to rename the habit
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            String newName = habitList[index][1];
-                                            return AlertDialog(
-                                              title: Text('Rename Habit'),
-                                              content: TextField(
-                                                autofocus: true,
-                                                decoration: InputDecoration(
-                                                  labelText: 'New Name',
-                                                  hintText: 'Enter new habit name',
-                                                ),
-                                                onChanged: (value) {
-                                                  newName = value;
-                                                },
-                                              ),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () => Navigator.pop(context),
-                                                  child: Text('Cancel'),
-                                                ),
-                                                ElevatedButton(
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      habitList[index][1] = newName;
-                                                    });
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Text('Rename'),
-                                                ),
-                                              ],
-                                            );
-                                          },
+                                    ),
+                                    SizedBox(width: 8.0),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => MyApp()),
                                         );
-                                      } else if (value == 'delete') {
-                                        // Delete the habit
-                                        setState(() {
-                                          habitList.removeAt(index);
-                                        });
-                                      }
-                                    },
-                                  ),
-                                ],
+                                      },
+                                      child: Icon(
+                                        Icons.hourglass_empty,
+                                      ),
+                                    ),
+                                    PopupMenuButton(
+                                      itemBuilder: (BuildContext context) => [
+                                        PopupMenuItem(
+                                          child: Text('Rename'),
+                                          value: 'rename',
+                                        ),
+                                        PopupMenuItem(
+                                          child: Text('Delete'),
+                                          value: 'delete',
+                                        ),
+                                      ],
+                                      onSelected: (value) {
+                                        if (value == 'rename') {
+                                          // Show dialog to rename the habit
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              String newName =
+                                                  habitList[index][1];
+                                              return AlertDialog(
+                                                title: Text('Rename Habit'),
+                                                content: TextField(
+                                                  autofocus: true,
+                                                  decoration: InputDecoration(
+                                                    labelText: 'New Name',
+                                                    hintText:
+                                                        'Enter new habit name',
+                                                  ),
+                                                  onChanged: (value) {
+                                                    newName = value;
+                                                  },
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(context),
+                                                    child: Text('Cancel'),
+                                                  ),
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        habitList[index][1] =
+                                                            newName;
+                                                      });
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Text('Rename'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        } else if (value == 'delete') {
+                                          // Delete the habit
+                                          setState(() {
+                                            habitList.removeAt(index);
+                                          });
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),                      
                             );
                           },
                         ),
