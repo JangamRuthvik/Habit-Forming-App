@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import '../services.dart/lists.dart';
 import 'package:flutter_alarm_clock/flutter_alarm_clock.dart';
 import './timer.dart';
@@ -12,6 +13,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int counter = 0;
+  int _hoursSelected = 0;
+  int _minutesSelected = 0;
   TimeOfDay _timeOfDay = TimeOfDay(hour: 11, minute: 27);
 
   @override
@@ -50,28 +53,87 @@ class _HomePageState extends State<HomePage> {
                         InputDecoration(labelText: 'Habit Descriiption'),
                     controller: habitDescriptionController,
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     Expanded(
-                  //       child: TextFormField(
-                  //         decoration:
-                  //             InputDecoration(labelText: 'Add a remainder'),
-                  //         controller: remainderController,
-                  //       ),
-                  //     ),
-                  //     Transform.translate(
-                  //       offset: Offset(0, 18), // move down by 8 pixels
-                  //       child: FloatingActionButton(
-                  //         onPressed: () {
-                  //           _showTimepicker();
-                  //         },
-                  //         child: Icon(Icons.add),
-                  //         mini: true,
-                  //       ),
-                  //     ),
-                  //   ],
-                  // )
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(child: Text('choose the time to focus')
+                          ),
+                        FloatingActionButton(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text("Select Time"),
+                                    content: Container(
+                                      height: 200,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Text('Hours',
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                              Text('minutes',
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ],
+                                          ),
+                                          TimePickerSpinner(
+                                            is24HourMode: true,
+                                            time: DateTime(0, 0),
+                                            isForce2Digits: true,
+                                            spacing: 60,
+                                            itemHeight: 40,
+                                            itemWidth: 60,
+                                            alignment: Alignment.center,
+                                            normalTextStyle: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.grey),
+                                            highlightedTextStyle: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.black),
+                                            onTimeChange: (time) {
+                                              setState(() {
+                                                _hoursSelected = time.hour;
+                                                _minutesSelected = time.minute;
+                                              });
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        child: Text("Ok"),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: Text("Close"),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      )
+                                    ],
+                                  );
+                                });
+                          },
+                          child: Icon(Icons.timer_rounded),
+                          mini: true,
+                        ),
+                      
+                    ],
+                  )
                 ],
               ),
               actions: [
@@ -113,6 +175,7 @@ class _HomePageState extends State<HomePage> {
         return Colors.green;
       }
     }
+
     bool check = false;
     void createalarm(String S) {
       if (check == true) {
@@ -120,9 +183,10 @@ class _HomePageState extends State<HomePage> {
         int minutes = 0;
         hour = _timeOfDay.hour;
         minutes = _timeOfDay.minute;
-        FlutterAlarmClock.createAlarm(hour, minutes,title:S);
+        FlutterAlarmClock.createAlarm(hour, minutes, title: S);
       }
     }
+
     void _showTimepicker(String s) {
       showTimePicker(context: context, initialTime: TimeOfDay.now())
           .then((value) {
@@ -133,6 +197,7 @@ class _HomePageState extends State<HomePage> {
         });
       });
     }
+
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: (() {
