@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
   int _seconds = 0;
   int _totalSeconds = 0;
   bool iscompleted = false;
+  int toreturn = 0;
   Timer? _timer;
   bool _isPaused = false;
   int _pausedSeconds = 0;
@@ -42,6 +43,7 @@ class _HomePageState extends State<HomePage> {
   void _startTimer() {
     setState(() {
       _totalSeconds = _hours * 3600 + _minutes * 60 + _seconds;
+      toreturn = _totalSeconds;
       _pausedSeconds = _totalSeconds;
       _isPaused = false;
       widget._hoursController.text = "";
@@ -52,6 +54,7 @@ class _HomePageState extends State<HomePage> {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_totalSeconds <= 0) {
         _timer?.cancel();
+        iscompleted = true;
         return;
       }
 
@@ -113,6 +116,16 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            print('object');
+            Navigator.of(context, rootNavigator: true)
+                .pop(<Object>[iscompleted, toreturn]);
+          },
+        ),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

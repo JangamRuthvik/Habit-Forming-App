@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red,
       ),
       home: NavigationScreen(
-        currentIndex: 2,
+        currentIndex: 0,
       ),
     );
   }

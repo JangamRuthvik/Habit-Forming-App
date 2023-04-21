@@ -15,12 +15,14 @@ class _HomePageState extends State<HomePage> {
   int counter = 0;
   int _hoursSelected = 0;
   int _minutesSelected = 0;
+  int tsx = 0;
+  int csx = 0;
+  bool check = false;
   TimeOfDay _timeOfDay = TimeOfDay(hour: 11, minute: 27);
-
   @override
   Widget build(BuildContext context) {
-    void addToHabitList(String habitName, String habitDescription) {
-      habitList.add([false, habitName, habitDescription, Icon(Icons.abc)]);
+    void addToHabitList(String habitName, String habitDescription, int a) {
+      habitList.add([false, habitName, habitDescription, Icon(Icons.abc), a]);
     }
 
     //   void _showTimepicker() {
@@ -56,82 +58,81 @@ class _HomePageState extends State<HomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(child: Text('choose the time to focus')
-                          ),
-                        FloatingActionButton(
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text("Select Time"),
-                                    content: Container(
-                                      height: 200,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Text('Hours',
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold)),
-                                              Text('minutes',
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold)),
-                                            ],
-                                          ),
-                                          TimePickerSpinner(
-                                            is24HourMode: true,
-                                            time: DateTime(0, 0),
-                                            isForce2Digits: true,
-                                            spacing: 60,
-                                            itemHeight: 40,
-                                            itemWidth: 60,
-                                            alignment: Alignment.center,
-                                            normalTextStyle: TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.grey),
-                                            highlightedTextStyle: TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.black),
-                                            onTimeChange: (time) {
-                                              setState(() {
-                                                _hoursSelected = time.hour;
-                                                _minutesSelected = time.minute;
-                                              });
-                                            },
-                                          ),
-                                        ],
-                                      ),
+                      Expanded(child: Text('choose the time to focus')),
+                      FloatingActionButton(
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("Select Time"),
+                                  content: Container(
+                                    height: 200,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Text('Hours',
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            Text('minutes',
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          ],
+                                        ),
+                                        TimePickerSpinner(
+                                          is24HourMode: true,
+                                          time: DateTime(0, 0),
+                                          isForce2Digits: true,
+                                          spacing: 60,
+                                          itemHeight: 40,
+                                          itemWidth: 60,
+                                          alignment: Alignment.center,
+                                          normalTextStyle: TextStyle(
+                                              fontSize: 20, color: Colors.grey),
+                                          highlightedTextStyle: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.black),
+                                          onTimeChange: (time) {
+                                            setState(() {
+                                              _hoursSelected = time.hour;
+                                              _minutesSelected = time.minute;
+                                              tsx = (_hoursSelected * 60 * 60) +
+                                                  (_minutesSelected * 60);
+                                            });
+                                          },
+                                        ),
+                                      ],
                                     ),
-                                    actions: [
-                                      TextButton(
-                                        child: Text("Ok"),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                      TextButton(
-                                        child: Text("Close"),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      )
-                                    ],
-                                  );
-                                });
-                          },
-                          child: Icon(Icons.timer_rounded),
-                          mini: true,
-                        ),
-                      
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: Text("Ok"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Text("Close"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    )
+                                  ],
+                                );
+                              });
+                        },
+                        child: Icon(Icons.timer_rounded),
+                        mini: true,
+                      ),
                     ],
                   )
                 ],
@@ -156,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       setState(() {
                         addToHabitList(habitNameController.text,
-                            habitDescriptionController.text);
+                            habitDescriptionController.text, tsx);
                       });
                       Navigator.pop(context);
                     },
@@ -196,6 +197,32 @@ class _HomePageState extends State<HomePage> {
           createalarm(s);
         });
       });
+    }
+
+    void updateHabitList(int index, int totalSeconds) {
+      habitList[index][4] -= totalSeconds;
+    }
+
+    void sameupdate(int index) {
+      Future.delayed(Duration.zero, () {
+        setState(() {
+          habitList[index][0] = true;
+          counter = habitList.where((habit) => habit[0] == true).length;
+        });
+      });
+    }
+
+    Text getCompletionStatus(int index) {
+      if (habitList[index][4] == 0) {
+        sameupdate(index);
+        return Text('completed');
+      } else if (habitList[index][4] > 60) {
+        return Text('${((habitList[index][4]) / 60).round()} minutes left');
+      } else if (habitList[index][4] <= 60 && habitList[index][4] > 0) {
+        return Text('${habitList[index][4]} seconds left');
+      } else {
+        return Text('');
+      }
     }
 
     return Scaffold(
@@ -312,7 +339,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       )
                     : SizedBox(
-                        height: 415,
+                        height: 400,
                         child: ListView.builder(
                           padding: EdgeInsets.zero,
                           shrinkWrap: true,
@@ -339,19 +366,28 @@ class _HomePageState extends State<HomePage> {
                               },
                               child: ListTile(
                                 title: Text(habitList[index][1]),
-                                subtitle: Text(habitList[index][2]),
+                                // subtitle: Text(habitList[index][2]),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(habitList[index][2]),
+                                    getCompletionStatus(index),
+                                  ],
+                                ),
+
                                 leading: Checkbox(
                                   value: habitList[index][0],
                                   onChanged: ((value) {
                                     setState(() {
                                       if (value == false) {
-                                        counter -= 1;
-                                        print(counter.toString());
-                                        habitList[index][0] = value;
-                                      } else
-                                        counter += 1;
-                                      print(counter.toString());
-                                      habitList[index][0] = value;
+                                        // counter -= 1;
+                                        // print(counter.toString());
+                                        // habitList[index][0] = value;
+                                      } else{
+                                        // counter += 1;
+                                      // print(counter.toString());
+                                      // habitList[index][0] = false;
+                                      }
                                     });
                                   }),
                                 ),
@@ -368,16 +404,26 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     SizedBox(width: 8.0),
                                     GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
+                                      onTap: () async {
+                                        final List<dynamic> result =
+                                            await Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) => MyApp()),
                                         );
+                                        final bool isCompleted = result[0];
+                                        final int totalSeconds = result[1];
+                                        print('isCompleted :${isCompleted}');
+                                        print('totalSeconds :${totalSeconds}');
+                                        setState(() {
+                                          check = isCompleted;
+                                          if (check == true) {
+                                            updateHabitList(
+                                                index, totalSeconds);
+                                          }
+                                        });
                                       },
-                                      child: Icon(
-                                        Icons.hourglass_empty,
-                                      ),
+                                      child: Icon(Icons.hourglass_empty),
                                     ),
                                     PopupMenuButton(
                                       itemBuilder: (BuildContext context) => [
