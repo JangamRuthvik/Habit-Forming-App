@@ -7,6 +7,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 String _formatTime(int value) {
   return value.toString().padLeft(2, '0');
 }
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   int _minutes = 0;
   int _seconds = 0;
   int _totalSeconds = 0;
+  bool iscompleted = false;
   Timer? _timer;
   bool _isPaused = false;
   int _pausedSeconds = 0;

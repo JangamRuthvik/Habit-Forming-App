@@ -114,22 +114,22 @@ class _HomePageState extends State<HomePage> {
       }
     }
     bool check = false;
-    void createalarm() {
+    void createalarm(String S) {
       if (check == true) {
         int hour = 0;
         int minutes = 0;
         hour = _timeOfDay.hour;
         minutes = _timeOfDay.minute;
-        FlutterAlarmClock.createAlarm(hour, minutes);
+        FlutterAlarmClock.createAlarm(hour, minutes,title:S);
       }
     }
-    void _showTimepicker() {
+    void _showTimepicker(String s) {
       showTimePicker(context: context, initialTime: TimeOfDay.now())
           .then((value) {
         setState(() {
           _timeOfDay = value!;
           check = true;
-          createalarm();
+          createalarm(s);
         });
       });
     }
@@ -295,7 +295,7 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        _showTimepicker();
+                                        _showTimepicker(habitList[index][1]);
                                       },
                                       child: Icon(
                                         Icons.alarm,
