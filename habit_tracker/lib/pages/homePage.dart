@@ -213,7 +213,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     Text getCompletionStatus(int index) {
-      if (habitList[index][4] == 0) {
+      if (habitList[index][4] <= 0) {
         sameupdate(index);
         return Text('completed');
       } else if (habitList[index][4] > 60) {
